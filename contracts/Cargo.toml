@@ -1,0 +1,6 @@
+[workspace]
+members = ["launchpad"]
+resolver = "2"
+
+[workspace.dependencies]
+soroban-sdk = "25.0.0"

@@ -1,0 +1,20 @@
+[workspace]
+members = [
+    "contracts/launchpad",
+    "backend"
+]
+resolver = "2"
+
+[workspace.dependencies]
+soroban-sdk = "21.0.0"
+soroban-token-sdk = "21.0.0"
+stellar-strkey = "0.0.8"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "1.0", features = ["full"] }
+reqwest = { version = "0.11", features = ["json"] }
+sqlx = { version = "0.7", features = ["runtime-tokio-rustls", "postgres", "chrono", "uuid"] }
+uuid = { version = "1.0", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+anyhow = "1.0"
+thiserror = "1.0"

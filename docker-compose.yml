@@ -1,0 +1,25 @@
+version: '3.3'
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: stellar_pump
+      POSTGRES_USER: stellar_user
+      POSTGRES_PASSWORD: stellar_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/migrations:/docker-entrypoint-initdb.d
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:

@@ -1,85 +1,111 @@
-# Stellar Pump Launchpad
 
-A fair-launch memecoin platform on the Stellar blockchain that replicates Pump.fun's behavior with trust-minimized, irreversible token launches.
+#  Stellar Pump Launchpad
 
-## Features
+**The first fair-launch memecoin protocol on Stellar.** Stellar Pump replicates the high-velocity, trustless bonding curve model of Pump.fun, powered by **Soroban Smart Contracts**. It ensures 100% rug-proof launches through immutable issuer accounts and deterministic on-chain pricing.
 
-- **Trust-minimized**: Mathematical impossibility of rug-pulls through immutable issuer accounts
-- **Bonding Curves**: Deterministic on-chain pricing with monotonic price increases
-- **Automatic DEX Launch**: Irreversible transition to Stellar DEX when conditions are met
-- **Native Assets**: Uses Stellar's native asset system for maximum compatibility
-- **Clean UX**: Hides blockchain complexity with automatic trustline management
+##  The "Anti-Rug" Guarantee
 
-## Architecture
+Unlike traditional launches where developers retain control, Stellar Pump utilizes Stellar's native protocol features to ensure safety:
 
-- **Soroban Smart Contracts**: Core logic for token distribution and pricing
-- **React Frontend**: Clean interface with wallet integration
-- **Rust Backend**: Real-time indexing and analytics via Horizon API
-- **PostgreSQL**: Token tracking and metrics storage
+* **AUTH_IMMUTABLE:** Issuer accounts are permanently locked upon launch.
+* **No Admin Backdoors:** Smart contracts contain zero withdrawal or "pause" functions for developer liquidity.
+* **Atomic DEX Migration:** Once the bonding curve is hit, the transition to the Stellar Decentralized Exchange (DEX) is irreversible and automated.
 
-## Development Setup
+---
+
+##  Architecture Stack
+
+| Component | Technology | Role |
+| --- | --- | --- |
+| **Smart Contracts** | Rust / Soroban | Core logic, bonding curves, and distribution |
+| **Frontend** | React / Tailwind | User interface and Freighter wallet integration |
+| **Backend** | Rust (Axum/Tokio) | Real-time indexing of Horizon API events |
+| **Database** | PostgreSQL | Analytics, historical price tracking, and metadata |
+| **Cache** | Redis | Fast retrieval of trending tokens and leaderboard |
+
+---
+
+##  Quick Start
 
 ### Prerequisites
 
-- Rust 1.70+
-- Node.js 18+
-- Docker & Docker Compose
-- Stellar CLI (for Soroban development)
+* **Rust** (1.70+) & **Wasm** target
+* **Node.js** (v18+)
+* **Stellar CLI** ([Install Guide](https://developers.stellar.org/docs/tools/developer-tools))
+* **Docker**
 
-### Installation
+### 1. Clone & Environment
 
-1. Clone the repository
-2. Copy `.env.example` to `.env` and configure
-3. Start database services:
-   ```bash
-   docker-compose up -d postgres redis
-   ```
-4. Install dependencies:
-   ```bash
-   # Backend
-   cargo build
-   
-   # Frontend
-   cd frontend && npm install
-   ```
+```bash
+git clone https://github.com/your-repo/stellar-pump.git
+cd stellar-pump
+cp .env.example .env
 
-### Running Locally
+```
 
-1. Start the backend indexer:
-   ```bash
-   cargo run --bin backend
-   ```
+### 2. Spin up Services
 
-2. Start the frontend:
-   ```bash
-   cd frontend && npm start
-   ```
+```bash
+docker-compose up -d postgres redis
 
-3. Deploy contracts to testnet:
-   ```bash
-   cd contracts/launchpad
-   stellar contract deploy --wasm target/wasm32-unknown-unknown/release/stellar_pump_launchpad.wasm --network testnet
-   ```
+```
 
-## Manual Setup Requirements
+### 3. Deploy Smart Contracts
 
-The following items require manual configuration:
+Ensure your Stellar CLI is configured for Testnet:
 
-1. **Stellar CLI Installation**: Install from https://developers.stellar.org/docs/tools/developer-tools
-2. **Wallet Setup**: Configure Freighter wallet for testnet
-3. **Database Setup**: Run migrations after PostgreSQL is running
-4. **Contract Deployment**: Deploy to testnet/mainnet and update contract addresses
-5. **Domain & SSL**: Configure production domain and SSL certificates
-6. **Monitoring**: Set up monitoring dashboards and alerting
+```bash
+cd contracts/launchpad
+cargo build --target wasm32-unknown-unknown --release
 
-## Security
+# Deploy to Testnet
+stellar contract deploy \
+  --wasm target/wasm32-unknown-unknown/release/stellar_pump_launchpad.wasm \
+  --network testnet \
+  --source-account <YOUR_ACCOUNT_ALIAS>
 
-This system provides mathematical guarantees against rug-pulls:
-- Issuer accounts are permanently locked with AUTH_IMMUTABLE
-- No admin withdrawal functions exist in contracts
-- Launch transitions are irreversible
-- All pricing logic is deterministic and on-chain
+```
 
-## License
+### 4. Launch Services
 
-MIT License# pmpfun
+**Backend Indexer:**
+
+```bash
+cargo run --bin backend
+
+```
+
+**Frontend:**
+
+```bash
+cd frontend && npm install && npm start
+
+```
+
+---
+
+## 🔧 Core Mechanics: The Bonding Curve
+
+The price of each token follows a deterministic mathematical formula. As more tokens are purchased, the price increases along the curve:
+
+Where  is the price and  is the circulating supply. Once the market cap reaches the threshold (e.g., 2000 XLM), the liquidity is automatically migrated to the Stellar DEX and the remaining LP tokens are burned.
+
+---
+
+## 🛠️ Manual Configuration Checklist
+
+* [ ] **Contract ID:** Update `frontend/src/config.js` with your deployed Contract ID.
+* [ ] **Network Passphrase:** Set to `Test SDF Network ; September 2015` for testnet.
+* [ ] **Trustlines:** Ensure your frontend handles `ChangeTrust` operations for new assets automatically.
+* [ ] **SSL:** Production deployments require SSL for Freighter wallet communication.
+
+## 🔗 Resources
+
+* **Live Contract Explorer:** [View on Stellar Lab](https://www.google.com/search?q=https://lab.stellar.org/smart-contracts/contract-explorer%3F%24%3Dnetwork%24id%3Dtestnet%26label%3DTestnet%26horizonUrl%3Dhttps:////horizon-testnet.stellar.org%26rpcUrl%3Dhttps:////soroban-testnet.stellar.org%26passphrase%3DTest%2520SDF%2520Network%2520/%3B%2520September%25202015%3B%26smartContracts%24explorer%24contractId%3DCDHPDLT7KVICFAGYUO4ICTC5TGGR2XN5ZYT56TWZMNM6ATFVKXKU57HI%3B%3B)
+* **Soroban Docs:** [https://soroban.stellar.org/](https://soroban.stellar.org/)
+
+## 📄 License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+---

@@ -18,6 +18,11 @@ Unlike traditional launches where developers retain control, Stellar Pump utiliz
 | Component | Technology | Role |
 | --- | --- | --- |
 | **Smart Contracts** | Rust / Soroban | Core logic, bonding curves, and distribution |
+| **Frontend** | React / Tailwind | User interface and Freighter wallet integration |
+| **Backend** | Rust (Axum/Tokio) | Real-time indexing of Horizon API events |
+| **Database** | PostgreSQL | Analytics, historical price tracking, and metadata |
+| **Cache** | Redis | Fast retrieval of trending tokens and leaderboard |
+
 
 ---
 

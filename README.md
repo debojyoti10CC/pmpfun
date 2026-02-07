@@ -7,6 +7,9 @@
 
 Unlike traditional launches where developers retain control, Stellar Pump utilizes Stellar's native protocol features to ensure safety:
 
+* **AUTH_IMMUTABLE:** Issuer accounts are permanently locked upon launch.
+* **No Admin Backdoors:** Smart contracts contain zero withdrawal or "pause" functions for developer liquidity.
+* **Atomic DEX Migration:** Once the bonding curve is hit, the transition to the Stellar Decentralized Exchange (DEX) is irreversible and automated.
 
 ---
 
